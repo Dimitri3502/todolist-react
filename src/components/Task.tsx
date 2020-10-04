@@ -1,12 +1,24 @@
 import React from 'react';
-import {Card, CardContent, Typography, CardActions, Button} from "@material-ui/core";
-import {TaskDTO} from "../api/dto/task.dto";
+import { Card, CardContent, Typography, CardActions, Button } from '@material-ui/core';
+import { TaskDTO } from '../api/dto/task.dto';
+import { TaskAPI } from '../api/task.api';
 
 interface Props {
   data: TaskDTO;
+  onTaskDeleted: (taskId: number) => void;
+  onTaskEdited: (taskDto: TaskDTO) => void;
 }
 
-function Task({data}: Props) {
+
+function Task({ data, onTaskDeleted, onTaskEdited }: Props) {
+
+  const onDelete = async () => {
+    await TaskAPI.deleteOne(data.id);
+
+    onTaskDeleted(data.id);
+
+  };
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -16,11 +28,17 @@ function Task({data}: Props) {
         <Typography variant="body2" component="p">
           {data.description}
         </Typography>
+        <Typography variant="body2" component="p">
+          {data.description}
+        </Typography>
+        <Typography variant="body2" component="p">
+          {data.status}
+        </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button onClick={() => onTaskEdited(data)} size="small" color="primary">
           EDIT</Button>
-        <Button size="small" color="secondary">
+        <Button onClick={onDelete} size="small" color="secondary">
           DELETE</Button>
       </CardActions>
     </Card>
